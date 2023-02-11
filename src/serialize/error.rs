@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 use crate::error::INVALID_STR;
-use pyo3_ffi::{PyErr_SetNone, PyErr_SetString, PyExc_RecursionError};
+use pyo3_ffi::{PyErr_SetNone, PyExc_RecursionError};
 use std::ffi::CStr;
 use std::ptr::NonNull;
 
