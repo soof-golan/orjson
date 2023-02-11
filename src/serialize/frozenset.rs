@@ -68,3 +68,14 @@ impl Serialize for FrozenSetSerializer {
         seq.end()
     }
 }
+
+#[inline(always)]
+pub fn is_frozenset(obj: *mut pyo3_ffi::PyObject, passthrough_subclass: bool) -> bool {
+    if unlikely!(obj.is_null()) {
+        false
+    } else if unlikely!(!passthrough_subclass) {
+        ffi!(PyFrozenSet_CheckExact(obj)) != 0
+    } else {
+        ffi!(PyFrozenSet_Check(obj)) != 0
+    }
+}

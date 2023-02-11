@@ -68,3 +68,14 @@ impl Serialize for SetSerializer {
         seq.end()
     }
 }
+
+#[inline(always)]
+pub fn is_set(obj: *mut pyo3_ffi::PyObject, passthrough_subclass: bool) -> bool {
+    if unlikely!(obj.is_null()) {
+        return false;
+    } else if unlikely!(!passthrough_subclass) {
+        ffi!(PySet_CheckExact(obj)) != 0
+    } else {
+        ffi!(PySet_Check(obj)) != 0
+    }
+}

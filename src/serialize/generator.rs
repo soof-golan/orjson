@@ -62,3 +62,12 @@ impl Serialize for GeneratorSerializer {
         seq.end()
     }
 }
+
+#[inline(always)]
+pub fn is_generator(obj: *mut pyo3_ffi::PyObject) -> bool {
+    if unlikely!(obj.is_null()) {
+        false
+    } else {
+        ffi!(PyGen_Check(obj)) != 0
+    }
+}

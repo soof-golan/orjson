@@ -157,21 +157,11 @@ pub fn pyobject_to_obtype_unlikely(obj: *mut pyo3_ffi::PyObject, opts: Opt) -> O
             ObType::NumpyScalar
         } else if opts & SERIALIZE_NUMPY != 0 && is_numpy_array(ob_type) {
             ObType::NumpyArray
-        } else if opts & SERIALIZE_SET != 0 && ob_type == SET_TYPE {
+        } else if opts & SERIALIZE_SET != 0 && is_set(obj, opts & PASSTHROUGH_SUBCLASS == 0) {
             ObType::Set
-        } else if opts & PASSTHROUGH_SUBCLASS == 0
-            && opts & SERIALIZE_SET != 0
-            && ffi!(PyType_IsSubtype(ob_type, SET_TYPE)) == 1
-        {
-            ObType::Set
-        } else if opts & SERIALIZE_SET != 0 && ob_type == FROZENSET_TYPE {
+        } else if opts & SERIALIZE_SET != 0 && is_frozenset(obj, opts & PASSTHROUGH_SUBCLASS == 0) {
             ObType::FrozenSet
-        } else if opts & PASSTHROUGH_SUBCLASS == 0
-            && opts & SERIALIZE_SET != 0
-            && ffi!(PyType_IsSubtype(ob_type, FROZENSET_TYPE)) == 1
-        {
-            ObType::FrozenSet
-        } else if opts & SERIALIZE_GENERATOR != 0 && ob_type == GENERATOR_TYPE {
+        } else if opts & SERIALIZE_GENERATOR != 0 && is_generator(obj) {
             ObType::Generator
         } else {
             ObType::Unknown
